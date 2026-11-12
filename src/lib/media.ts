@@ -12,12 +12,20 @@ export type ProductPhoto = {
   transparent: boolean;
 };
 
+/** Главная фотография hero (public/images/main-page.*) с исходными размерами */
+export type HeroPhoto = {
+  src: string;
+  width: number;
+  height: number;
+};
+
 export type CertificateMedia = {
   image: string | null;
   pdf: string | null;
 };
 
 export type SiteMedia = {
+  hero: HeroPhoto | null;
   product: ProductPhoto | null;
   certificate: CertificateMedia;
 };

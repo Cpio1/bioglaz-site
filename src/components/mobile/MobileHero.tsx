@@ -1,9 +1,10 @@
 import { ArrowDown, Leaf, MapPin, Package } from "lucide-react";
 import { brand, heroFacts } from "@/content/site";
-import type { ProductPhoto } from "@/lib/media";
+import type { HeroPhoto, ProductPhoto } from "@/lib/media";
 import { WHATSAPP_ORDER_URL } from "@/lib/whatsapp";
 import { buttonClass } from "@/components/shared/Button";
 import { ProductVisual } from "@/components/shared/ProductVisual";
+import { HeroImage } from "@/components/shared/HeroImage";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 import { Blob, Ring } from "@/components/shared/Decor";
 import { HERO_IMAGE_SIZES } from "@/components/shared/heroShared";
@@ -14,7 +15,7 @@ const factIcons = { capsules: Package, formula: Leaf, origin: MapPin } as const;
  * Отдельная мобильная композиция: заголовок → подзаголовок → крупная баночка →
  * преимущества → кнопка. Только CSS-анимации, без parallax — легко для телефона.
  */
-export function MobileHero({ photo }: { photo: ProductPhoto | null }) {
+export function MobileHero({ hero, photo }: { hero: HeroPhoto | null; photo: ProductPhoto | null }) {
   return (
     <div className="relative">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
@@ -43,15 +44,25 @@ export function MobileHero({ photo }: { photo: ProductPhoto | null }) {
           {brand.tagline}
         </p>
 
-        {/* Крупная баночка — полностью помещается по ширине экрана */}
+        {/* Главное фото — полностью помещается по ширине экрана */}
         <div className="animate-appear relative mt-6 w-full max-w-[420px]" style={{ animationDelay: "200ms" }}>
           <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[92%] -translate-x-1/2 -translate-y-1/2">
-            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_45%,#ffffff,rgb(234_243_255/0.9)_50%,rgb(54_120_246/0.16)_72%,transparent_74%)]" />
+            {hero ? (
+              <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,rgb(54_120_246/0.38),rgb(86_214_209/0.14)_55%,transparent_72%)] blur-xl" />
+            ) : (
+              <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_45%,#ffffff,rgb(234_243_255/0.9)_50%,rgb(54_120_246/0.16)_72%,transparent_74%)]" />
+            )}
             <Ring className="-inset-[6%]" />
           </div>
-          <div className="animate-float relative mx-auto w-[82%] motion-reduce:animate-none">
-            <ProductVisual photo={photo} sizes={HERO_IMAGE_SIZES} priority />
-          </div>
+          {hero ? (
+            <div className="relative mx-auto w-[74%] max-w-[300px] py-2">
+              <HeroImage photo={hero} />
+            </div>
+          ) : (
+            <div className="animate-float relative mx-auto w-[82%] motion-reduce:animate-none">
+              <ProductVisual photo={photo} sizes={HERO_IMAGE_SIZES} priority />
+            </div>
+          )}
         </div>
 
         <p className="animate-rise mt-4 max-w-md text-[15.5px] leading-relaxed text-muted" style={{ animationDelay: "260ms" }}>

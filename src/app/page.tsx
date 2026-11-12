@@ -19,7 +19,7 @@ export default function Home() {
       <JsonLd />
       <SiteHeader />
       <main id="main">
-        <HeroSection photo={media.product} />
+        <HeroSection hero={media.hero} photo={media.product} />
         <AboutSection photo={media.product} />
         <CompositionSection />
         <UsageSection />

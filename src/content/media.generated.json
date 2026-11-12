@@ -1,4 +1,9 @@
 {
+  "hero": {
+    "src": "/images/main-page.jpeg",
+    "width": 854,
+    "height": 1280
+  },
   "product": null,
   "certificate": {
     "image": null,

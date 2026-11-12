@@ -4,18 +4,19 @@ import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { ArrowDown, Leaf, MapPin, Package } from "lucide-react";
 import { brand, heroFacts } from "@/content/site";
-import type { ProductPhoto } from "@/lib/media";
+import type { HeroPhoto, ProductPhoto } from "@/lib/media";
 import { WHATSAPP_ORDER_URL } from "@/lib/whatsapp";
 import { scrollToSection } from "@/lib/scroll";
 import { buttonClass } from "@/components/shared/Button";
 import { ProductVisual } from "@/components/shared/ProductVisual";
+import { HeroImage } from "@/components/shared/HeroImage";
 import { WhatsAppIcon } from "@/components/shared/WhatsAppIcon";
 import { Blob, Ring } from "@/components/shared/Decor";
 import { HERO_IMAGE_SIZES } from "@/components/shared/heroShared";
 
 const factIcons = { capsules: Package, formula: Leaf, origin: MapPin } as const;
 
-export function DesktopHero({ photo }: { photo: ProductPhoto | null }) {
+export function DesktopHero({ hero, photo }: { hero: HeroPhoto | null; photo: ProductPhoto | null }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -99,8 +100,14 @@ export function DesktopHero({ photo }: { photo: ProductPhoto | null }) {
         {/* Баночка */}
         <div className="relative col-span-5 flex justify-center xl:col-span-6">
           <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-1/2 size-[min(560px,72svh)] -translate-x-1/2 -translate-y-1/2">
-            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_45%,rgb(255_255_255/0.95),rgb(234_243_255/0.9)_45%,rgb(54_120_246/0.18)_72%,transparent_74%)]" />
-            <div className="absolute inset-[12%] rounded-full bg-[radial-gradient(circle,rgb(54_120_246/0.35),transparent_70%)] blur-2xl" />
+            {hero ? (
+              <div className="absolute inset-[4%] rounded-full bg-[radial-gradient(circle,rgb(54_120_246/0.42),rgb(86_214_209/0.14)_55%,transparent_72%)] blur-2xl" />
+            ) : (
+              <>
+                <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_45%,rgb(255_255_255/0.95),rgb(234_243_255/0.9)_45%,rgb(54_120_246/0.18)_72%,transparent_74%)]" />
+                <div className="absolute inset-[12%] rounded-full bg-[radial-gradient(circle,rgb(54_120_246/0.35),transparent_70%)] blur-2xl" />
+              </>
+            )}
             <Ring className="-inset-[8%]" />
             <Ring className="-inset-[20%] border-dashed opacity-60" />
           </div>
@@ -108,10 +115,19 @@ export function DesktopHero({ photo }: { photo: ProductPhoto | null }) {
           <motion.div style={{ y: jarY }} className="relative w-full">
             <div className="animate-appear" style={{ animationDelay: "150ms" }}>
               <div className="animate-float motion-reduce:animate-none">
-                {/* Ширина ограничена и колонкой, и высотой экрана — баночка всегда целиком в кадре */}
-                <div className="relative mx-auto w-full max-w-[max(320px,min(480px,calc((100svh-210px)*0.8)))]">
-                  <ProductVisual photo={photo} sizes={HERO_IMAGE_SIZES} priority />
-                </div>
+                {/* Ширина ограничена и колонкой, и высотой экрана — фото всегда целиком в кадре */}
+                {hero ? (
+                  <div
+                    className="relative mx-auto w-full"
+                    style={{ maxWidth: `max(300px, min(460px, calc((100svh - 190px) * ${(hero.width / hero.height).toFixed(4)})))` }}
+                  >
+                    <HeroImage photo={hero} />
+                  </div>
+                ) : (
+                  <div className="relative mx-auto w-full max-w-[max(320px,min(480px,calc((100svh-210px)*0.8)))]">
+                    <ProductVisual photo={photo} sizes={HERO_IMAGE_SIZES} priority />
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>
@@ -123,7 +139,7 @@ export function DesktopHero({ photo }: { photo: ProductPhoto | null }) {
           <FloatingTag className="right-[0%] top-[42%] xl:right-[4%]" delay="720ms" dot="bg-electric">
             Витамины A, C, E, D3
           </FloatingTag>
-          <FloatingTag className="bottom-[14%] left-[6%] xl:left-[10%]" delay="840ms" dot="bg-brand">
+          <FloatingTag className="bottom-[5%] left-[4%] xl:left-[8%]" delay="840ms" dot="bg-brand">
             Витамины группы B
           </FloatingTag>
         </div>
